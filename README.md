@@ -1,1 +1,1 @@
-A site to help people encourage their friends to vote. Built on the Hifi content management system (http://gethifi.com). Utilizes the Facebook API.
+A site to help people encourage their friends to vote. Built on the [Hifi content management system](http://gethifi.com). Utilizes the Facebook API with JavaScript.
