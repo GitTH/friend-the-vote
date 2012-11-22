@@ -1,0 +1,17 @@
+<h4>Social Links</h4>
+<nav>
+    <ul>
+        {% for link in hifi.get({'type':'content','parent':{'type':'content','url':'/social-links'},'inMenu':true,'orderBy':'ordinal'}) %}
+        <li><a{% if link.newWindow %} target="_blank"{% endif %} href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+    </ul>
+</nav>
+<h4>Recent Posts</h4>
+<ol>
+    {% for post in hifi.get({'type':'post','parent':{'type':'feed','url':'/blog'},'orderBy':'-publishedAt'}) %}
+    <li>
+        <h5><a href="{{ post.url }}">{{ post.title }}</a></h5>
+        <time datetime="{{ post.publishedAt|date('Y-m-d') }}">{{ post.publishedAt|date('F j, Y') }}</time>
+    </li>
+    {% endfor %}
+</ol>

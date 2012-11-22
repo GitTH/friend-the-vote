@@ -1,0 +1,18 @@
+{% extends "page/page.html" %}
+
+{% block page %}
+    <header class="main-title">
+        <h2>{{ this.title }}</h2>
+    </header><!-- end .main-title -->
+    <div class="content">
+    {{ this.content }}
+    </div><!--end .content -->
+    <div class="form">
+    {% if message != '' %}
+        <p>{{ message }}</p>
+    {% elseif this.form %}
+        {% import 'common/form.html' as formHelper %}
+        {{ formHelper.draw( this, this.form ) }}
+    {% endif %}
+    </div><!--end .form -->
+{% endblock page %}

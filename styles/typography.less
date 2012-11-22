@@ -1,0 +1,114 @@
+.type-form .content {
+    color: #333;
+    text-align: left;
+}
+
+.content, .content input {
+    color: #333;
+}
+.content sup, .content sub {
+    font-size: 80%;
+    line-height: 0;
+}
+.content sup {
+    vertical-align: super;
+}
+.content sub {
+    vertical-align: sub;
+}
+
+.form {
+    width: 600px;
+    margin: 0 auto;
+}
+    
+/* Forms */
+.form form { 
+    text-align: left;
+}
+    .form form p {
+        margin: 0;
+    }
+.form label {
+    display: block;
+    color: @primary;
+    margin-top: 30px;
+    font-weight: bold;
+}
+    .form .checkbox input, .content .checkbox label {
+        display: inline;
+    }
+    .form .checkbox input {
+        vertical-align: baseline;
+    }
+.form input {
+    display: block;
+}
+.form input[type=text], .form input[type=email], .form input[type=url], .form input[type=password], .form textarea {
+    margin: 6px 0;
+    width: 560px;
+    border: 1px solid #999;
+    background: #fff;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    .proxima;
+    &:focus {
+        border: solid 1px @primary;
+        box-shadow: none;
+        outline: none;
+    }
+}
+.form textarea {
+    height: 160px; 
+    width: 450px;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.form .checkboxgroup {
+    margin-top: 30px;
+    label {
+        display: inline-block;
+        vertical-align: middle;
+        margin-top: 10px;
+        display: block;
+        font-weight: normal;
+        color: inherit;
+    }
+    input {
+        display: inline-block;    
+        vertical-align: middle;
+    }
+    .checkboxgroup-options {
+        display: block;   
+    }
+}
+
+.form label.error {
+    width: 400px;
+    text-align: right;
+    color: #aa0000;
+}
+.form label.error:before {
+    content: "▲ ";
+}
+.form input.error, .form textarea.error {
+    border-color: #aa0000;
+}
+
+
+
+.form input[type="submit"] {
+    .button;    
+    margin-top: 30px;
+    cursor: pointer;
+    padding: 15px 40px;
+}
+
+.form .submit {
+    text-align: center;
+    margin-top: 10px;
+}

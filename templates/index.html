@@ -1,0 +1,171 @@
+<html xmlns:og="http://ogp.me/ns" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}{{ settings.meta.title|e }}{% endblock %}</title>
+
+    <!-- See https://developers.facebook.com/docs/opengraph/ -->
+    {% if this.custom.page.candidate_name %}
+    <meta property="og:title" content="Join me in supporting {{ this.custom.page.candidate_name }} — encourage your friends to support {{ this.custom.page.candidate_name }} here" />
+    <meta property="og:description" content="Join me in supporting {{ this.custom.page.candidate_name }} through the easy-to-use tool at {{ hifi.url.host }}{{ hifi.url.path }}. You can make a difference!" />
+    {% else %}
+    <meta property="og:title" content="Commit to vote this election and encourage your friends to do the same | FriendtheVote.com" />
+    <meta property="og:description" content="Join me and encourage your friends to vote this election through the easy-to-use tool at {{ hifi.url.host }}{{ hifi.url.path }}. You can make a difference!" />
+    {% endif %}
+    <meta property="og:url" content="http://{{ hifi.url.host }}{{ hifi.url.path }}" />
+    <meta property="og:site_name" content="FriendtheVote.com" />
+    <meta property="fb:admins" content="25817727"/>
+    <meta property="og:type" content="website" />
+    {% if this.custom.page.facebook_preview_image %}
+    <meta property="og:image" content="{{ this.custom.page.facebook_preview_image|imagesize({width:200,height:200 }) }}"/>
+    {% else %}
+    <meta property="og:image" content="{{ hifi.url.images }}vote-stamp.png"/>
+    {% endif %}
+  
+    <link rel="shortcut icon" href="{{ hifi.url.images }}favicon-star.png" />
+    
+     <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  
+    <!-- typekit -->
+    <script src="//use.typekit.net/tyz4tlf.js"></script>
+    <script>try{Typekit.load();}catch(e){}</script>
+  
+    {% css 'all.less' min %}
+    
+    <!--[if lt IE 9]>{% css 'ie' min %}<![endif]-->
+    
+    {% include 'snippets/analytics.html' %}
+  
+</head>
+<body class="type-{{ this.type }}">
+<div id="fb-root"></div> 
+
+<header id="h" class="cf">
+    <div class="container">
+        <h1><a href="/">Friend the Vote</a></h1>
+        
+        <div id="user-info">
+            <div class="loggedin">
+                <img src="{{ hifi.url.images }}loader-circle.gif" class="user-picture" width="30" height="30" alt="User photo" />
+                <div id="auth-displayname" class="user-name"></div>
+            </div><!--end .loggedin -->
+        </div><!--end #user-info-->
+    </div><!--end .container -->
+</header><!--end #h -->
+
+{% set statename as this.custom.page.state %}
+{% set stateinfo as hifi.get({'type':'page', 'title':statename})[0] %}
+
+{% if stateinfo.custom.states.early_voting_period %}
+<section id="voting-info">
+
+     <ul><li><strong>Early Voting Period:</strong> {{ stateinfo.custom.states.early_voting_period }}</li><li><strong>Absentee Ballot Request Deadline:</strong> {{ stateinfo.custom.states.absentee_ballot_request_deadline }}</li></ul>
+
+</section><!--end #voting-info -->
+{% endif %}
+
+{% block full %}
+<div id="main-content">
+    <div class="container">
+        <div id="full">
+        
+            {% block page %}
+            
+            {% if this.type != "home" %}
+                <header class="main-title">
+                    <h2>{#<span class="state-icon stateface stateface-replace stateface-{{ this.custom.states.postal_code_abbreviation }}">{{ this.title }}</span>#} {{ this.title }}</h2>
+                </header><!-- end .main-title -->
+            {% endif %}
+        
+            <section id="start" class="page">        
+            
+                <div class="content">
+            
+                    <p>To get started with encouraging your friends to vote{% if this.custom.page.candidate_name %} for {{ this.custom.page.candidate_name }}{% else %} this election{% endif %}, click the big blue button below. 
+                    We'll connect to your Facebook account and find your friends that list themselves as being in {{ this.custom.page.state }}.</p>
+                    
+                    <p>Please note <strong>that none of your personal information is saved by us</strong> and <strong>nothing is posted on your friends' pages without your explicit permission</strong>.</p>
+                
+                </div><!--end .content -->
+                
+                <div class="button-container">
+                    <button id="start-button" class="button">Get started</button>
+                </div><!--end .button-container -->
+            
+            </section><!--end #login -->
+            
+            <section id="main" class="page">
+            
+                <div class="content">
+
+                    <p>We've found friends that also list themselves as being in {% if this.custom.page.state %}{{ this.custom.page.state }}{% else %}your state{% endif %}. Let them know you are {% if this.custom.page.candidate_name %} supporting {{ this.custom.page.candidate_name }}{% else %} voting{% endif %} &mdash; and encourage them to do the same &mdash; by selecting friends below!</p>
+
+                </div><!--end .content -->
+                
+                <ul id="user-friends" class="loading"></ul><!--end #user-friends -->
+                
+                <div class="button-container">
+                    <button id="finish-button" class="button">Ok! I'm finished telling my friends!</button>
+                </div><!--end .button-container -->
+                    
+            </section><!--end #content -->
+            
+            <section id="finish" class="page">
+            
+                <div class="content">
+            
+                    <p>Thanks for helping to make a difference this election by encouraging your friends to vote!</p>
+                    
+                    <p>There's nothing left to do here (unless you forgot to message some friends) &mdash; just remember to vote on November 6 or earlier, if your state has early voting.</p>
+            
+                    <p>For details on absentee ballots, early voting, polling locations, and more important election information for {% if this.custom.page.state %}{{ this.custom.page.state }}{% else %}your state{% endif %}, <a target="_blank" href="http://apps.npr.org/early-voting-2012/">visit here</a>.
+                    
+                </div><!--end .content -->
+            
+            </section><!--end #finish -->
+            
+            {% endblock page %}
+
+        </div><!--end #page -->
+    </div><!--end .container -->
+    
+</div><!--end #main -->
+{% endblock full %}
+
+
+<footer id="f">
+    <div class="container">
+        <p>Built for democracy by <a href="http://newmediacampaigns.com">New Media Campaigns</a></p>
+        <br>
+        <a class="loggedin" id="auth-logoutlink" href="#">Log Out</a> | <a href="mailto:tyler@newmediacampaigns.com">Contact</a>
+    </div><!--end .container -->
+</footer><!--end #f -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+{% block js %}
+<!-- give us some of that javascript -->
+<script>
+    // unique page variables
+    {% if this.custom.page.state %}
+        var pageState = "{{ this.custom.page.state }}";
+    {% else %}
+        var pageState = "all";
+    {% endif %}
+    {% if this.custom.page.candidate_name %}
+        var pageCandidate = "{{ this.custom.page.candidate_name }}";
+    {% else %}
+        var pageCandidate = "default";
+    {% endif %}
+        var url = "http://{{ hifi.url.host }}{{ hifi.url.path }}";
+    {% if this.custom.page.facebook_preview_image %}
+        var fbImageUrl = "{{ this.custom.page.facebook_preview_image|imagesize({width:200,height:200 }) }}";
+    {% else %}
+        var fbImageUrl = "{{ hifi.url.images }}vote-stamp.png";
+    {% endif %}
+</script>
+{% js "siteFunctions,facebook,smoothScroll,setup" %}
+{% endblock js %}
+
+</body>
+</html>

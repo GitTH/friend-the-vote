@@ -1,0 +1,13 @@
+{% if items %}
+<ul{% if currentDepth == 1 and options.cssId %} id="{{ options.cssId }}"{% endif %}{% if currentDepth == 1 and options.cssClass %} class="{{ options.cssClass }}"{% endif %}>
+    {% if currentDepth == 1 and options.includeParent %}
+        {% set parent as hifi.get(options.root)[0] %}
+        {% if parent.inMenu %}
+            {% include options.itemTemplate with ['item':parent,'options':options,'loop':loop,'currentDepth':currentDepth] %}
+        {% endif %}
+    {% endif %}
+    {% for item in items %}
+        {% include options.itemTemplate with ['item':item,'loop':loop,'options':options, 'currentDepth':currentDepth] %}
+    {% endfor %}           
+</ul>
+{% endif %}

@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+
+{% block title %}
+    {% set currentPageNumber as hifi.http.get['page']|e %}
+    {% if not currentPageNumber %}
+        {% set currentPageNumber as 1 %}
+    {% endif %}
+    {{ this.title|e }}{% if currentPageNumber > 1 %} - Page {{ currentPageNumber }}{% endif %} - {{ hifi.settings.title }}
+{% endblock %}
+
+{% block rss %}
+    {% set feed as this %}
+    <link rel="alternate" type="application/rss+xml" title="{{ feed.title }}" href="{{ feed.url }}.rss" />
+{% endblock rss %}
+
+{% block primary %}
+    <article class="content">
+        <header>
+            <h1>{{ this.title }}</h1>
+        </header>
+        {{ this.content }}
+    </article>
+    {% block listing %}
+        {% import 'snippets/pagination/paginator.html' as paginator %}
+        {{ paginator.paginate({
+            query: {type: 'post', parent: this.id, orderBy: '-publishedAt', relations:'*'},
+            template: 'page/post/post-partial.html'
+        }) }}
+    {% endblock %}
+{% endblock primary %}
+
+{% block sidebar %}
+    {% parent %}
+    {% include 'feed/sidebar.html' %}
+{% endblock sidebar %}

@@ -1,0 +1,80 @@
+{# Options Description
+
+    Everything is optional. Order is not important.
+
+    root:
+        A query to find the starting point for the nav. So {type: 'page', url: '/about'}
+        would start from the about page. It uses the first result from the query.
+    maxDepth:
+        The number of levels this should traverse.
+    childQuery:
+        This restricts the items that are found. To get only pages alphabetically
+        with no concern for inMenu status use:
+        {type: 'page', orderBy: 'title'}
+    activeClass:
+        The class to put on the active nav item based on url.
+    ancestorActiveClass:
+        The class to put on ancestors to the active nav item based on url.
+    includeParent:
+        If true, the root is included in the first level nav.
+    includeLevelClass:
+        Display a level class on each li (ie. class="level_3")
+    levelClassPrefix:
+        Specify the string you want to prefix the level number
+    cssId:
+        The id attribute assigned to the nav's first ul
+    cssClass
+        The class attribute assigned to the nav's first ul
+    newWindowAttribute:
+        For link types that have newWindow set, what attribute do you want to
+        add to the link.
+    linkFolders:
+        Specify whether folder links should have the href attribute
+    wrapperTemplate:
+        Path to the template to use for wrappers
+    itemTemplate:
+        Path to the template to use for items
+
+#}
+
+{% macro draw(options) %}
+    {% import "snippets/navigation/navigation.html" as navigation %}
+    {% set defaults as {
+                    root: {type: 'home'},
+                    maxDepth: 2,
+                    childQuery: {type: 'content', inMenu: true, orderBy: 'ordinal', count: 100},
+                    activeClass: 'active',
+                    ancestorActiveClass: 'active',
+                    includeParent: true,
+                    includeLevelClass: false,
+                    levelClassPrefix: 'level_',
+                    cssId: '',
+                    cssClass: '',
+                    newWindowAttribute: 'target="_blank"',
+                    linkFolders: false,
+                    wrapperTemplate: 'snippets/navigation/wrapper.html',
+                    itemTemplate: 'snippets/navigation/item.html'
+    } %}
+    {% set options as defaults|merge(options) %}
+
+    {% set root as hifi.get(options.root)[0] %}
+
+    {% if options.maxDepth > 1 %}
+        {% set children as {children: {children: options.childQuery}} %}
+        
+        {% if options.maxDepth > 2 %}
+            {% for i in 3..options.depth %}
+                {% set children as options.childQuery|merge(children) %}
+                {% set children as {children: {children: children}} %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+    
+    {% set query as options.childQuery|merge({parent: root.id}) %}
+    {% set query as query|merge(children) %}
+    
+    {% set items as hifi.get(query) %}
+    
+    {% include options.wrapperTemplate with ['items':items,'options':options,'currentDepth':1] %}
+
+{% endmacro %}

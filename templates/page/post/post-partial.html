@@ -1,0 +1,11 @@
+<article class="content">
+    <header>
+        <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+        {% include 'page/post/meta.html' with ['this':item] %}
+    </header>
+    {% if item.excerpt|striptags|length > 5 %}
+        {{ item.excerpt }}
+    {% else %}
+        {{ item.content }}
+    {% endif %}
+</article>

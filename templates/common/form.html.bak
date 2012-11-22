@@ -1,0 +1,240 @@
+{#
+IMPORTANT!!! DO NOT CHANGE THIS TEMPLATE!!!
+
+Changes to this template may be overwritten by HiFi at any time.
+To customize a website form, override each appropriate field type (e.g. "text" or "radio")
+by creating an override file at `common/form/{type}.html`. If available, the override file will
+be used instead of the type's default markup below. Available override templates are:
+
+Text:
+    common/form/text.html
+Email:
+    common/form/email.html
+Phone:
+    common/form/phone.html
+Textarea:
+    common/form/textarea.html
+Select:
+    common/form/select.html
+Radio:
+    common/form/radio.html
+Checkbox:
+    common/form/checkbox.html
+Checkbox Group:
+    common/form/checkboxgroup.html
+Header:
+    common/form/header.html
+Hidden:
+    common/form/hidden.html
+Rich Text:
+    common/form/richtext.html
+
+You may also customize the HTML form's attributes by passing an array
+of custom settings as the third argument of this form helper's `draw`
+method. For example, in `page/form/form.html` or in a custom form template,
+you could write:
+
+    {% import 'common/form.html' as formHelper %}
+    {{ formHelper.draw( this, this.form, { charset: "iso-8859-1", validate: false, autocomplete: true ) }}
+
+The following form settings may be customized:
+
+method
+    The method with which the form is submitted
+    (string; default is "post")
+charset
+    The form's acceptable character set
+    (string; default is "utf-8")
+target
+    The form's target upon submission (e.g. "_self", "_blank", "_parent")
+    (string; default is null)
+validate
+    Enable HTML5 form validation for applicable fields?
+    (boolean; default is true)
+autocomplete
+    Enable HTML5 auto-completion for applicable fields?
+    (boolean; default is false)
+#}
+
+{# Draw an individual form field #}
+{% macro field( field ) %}
+    {% import "common/form.html" as formHelper %}
+    {% set type as field.type %}
+
+    {% if type == 'aggregate' %}
+
+        <fieldset class="{{ type }}">
+            {{ formHelper.drawFields(field.fields) }}
+        </fieldset>
+
+    {% elseif type == 'email' %}
+
+        {% if 'common/form/email.html'|is_template %}
+            {% include 'common/form/email.html' with ['field': field] %}
+        {% else %}
+            <fieldset class="email">
+                <label for="{{ field.name }}">{{ field.label|e }}{% if field.required %}<span class="req">*</span>{% endif %}</label>
+                {% if field.instructions %}<div class="field-instructions">{{ field.instructions|e }}</div>{% endif %}
+                <input type="email" class="text email{% if field.required %} required{% endif %}" id="{{ field.name }}" name="{{ field.name }}" value="{{ field.default }}"{% if field.required %} required{% endif %}/>
+            </fieldset>
+        {% endif %}
+
+    {% elseif type == 'phone' %}
+
+        {% if 'common/form/phone.html'|is_template %}
+            {% include 'common/form/phone.html' with ['field': field] %}
+        {% else %}
+            <fieldset class="phone">
+                <label for="{{ field.name }}">{{ field.label|e }}{% if field.required %}<span class="req">*</span>{% endif %}</label>
+                {% if field.instructions %}<div class="field-instructions">{{ field.instructions|e }}</div>{% endif %}
+                <input type="tel" class="text phone{% if field.required %} required{% endif %}" id="{{ field.name }}" name="{{ field.name }}" value="{{ field.default }}"{% if field.required %} required{% endif %}/>
+            </fieldset>
+        {% endif %}
+
+    {% elseif type == 'textarea' %}
+
+        {% if 'common/form/textarea.html'|is_template %}
+            {% include 'common/form/textarea.html' with ['field': field] %}
+        {% else %}
+            <fieldset class="textarea">
+                <label for="{{ field.name }}">{{ field.label|e }}{% if field.required %}<span class="req">*</span>{% endif %}</label>
+                {% if field.instructions %}<div class="field-instructions">{{ field.instructions|e }}</div>{% endif %}
+                <textarea id="{{ field.name }}" name="{{ field.name }}"{% if field.required %} class="required"{% endif %} rows="10" cols="50"{% if field.required %} required{% endif %}>{{ field.default }}</textarea>
+            </fieldset>
+        {% endif %}
+
+    {% elseif type == 'select' %}
+
+        {% if 'common/form/select.html'|is_template %}
+            {% include 'common/form/select.html' with ['field': field] %}
+        {% else %}
+            <fieldset class="select">
+                {% set options as field.properties.options|regex_replace("\\s*,\\s*", ",")|explode(",") %}
+                <label for="{{ field.name }}">{{ field.label|e }}{% if field.required %}<span class="req">*</span>{% endif %}</label>
+                {% if field.instructions %}<div class="field-instructions">{{ field.instructions|e }}</div>{% endif %}
+                <select id="{{ field.name }}" name="{{ field.name }}"{% if field.required %} class="required" required{% endif %}>
+                    {% for option in options %}{% if ":" in option %}{% set option as option|explode(":") %}<option value="{{ option[0]|e }}"{% if option[0] == field.default %} selected{% endif %}>{{ option[1]|e }}</option>{% else %}<option{% if option == field.default %} selected{% endif %}>{{ option|e }}</option>{% endif %}{% endfor %}
+                </select>
+            </fieldset>
+        {% endif %}
+
+    {% elseif type == 'radio' %}
+
+        {% if 'common/form/radio.html'|is_template %}
+            {% include 'common/form/radio.html' with ['field': field] %}
+        {% else %}
+            <fieldset class="radio">
+                {% set options as field.properties.options|regex_replace("\\s*,\\s*", ",")|explode(",") %}
+                <label>{{ field.label|e }}{% if field.required %}<span class="req">*</span>{% endif %}</label>
+                {% if field.instructions %}<div class="field-instructions">{{ field.instructions|e }}</div>{% endif %}
+                <fieldset>
+                    {% for option in options %}
+                        {% if ":" in option %}
+                            {% set option as option|explode(":") %}
+                            <label><input type="radio" name="{{ field.name }}" value="{{ option[0]|e }}"{% if field.default == option[0] %} checked{% endif %}/> {{ option[1]|e }}</label>
+                        {% else %}
+                            <label><input type="radio" name="{{ field.name }}" value="{{ option|e }}"{% if field.default == option %} checked{% endif %}/> {{ option|e }}</label>
+                        {% endif %}
+                    {% endfor %}
+                </fieldset>
+            </fieldset>
+        {% endif %}
+
+    {% elseif type == 'checkboxgroup' %}
+        
+        {% if 'common/form/checkboxgroup.html'|is_template %}
+            {% include 'common/form/checkboxgroup.html' with ['field': field] %}
+        {% else %}
+            <fieldset class="checkboxgroup">
+                <label for="{{ field.name }}">{{ field.label|e }}</label>
+                {% if field.instructions %}<div class="field-instructions">{{ field.instructions|e }}</div>{% endif %}
+                {% set options as field.properties.options|regex_replace("\\s*,\\s*", ",")|explode(",") %}
+                <fieldset class="checkboxgroup-options">
+                    {% for option in options %}
+                        {% if ":" in option %}
+                            {% set option as option|explode(":") %}
+                            <label><input type="checkbox" name="{{ field.name }}[]" value="{{ option[0]|e }}"/> {{ option[1]|e }}</label>
+                        {% else %}
+                            <label><input type="checkbox" name="{{ field.name }}[]" value="{{ option|e }}"/> {{ option|e }}</label>
+                        {% endif %}
+                    {% endfor %}
+                </fieldset>
+            </fieldset>
+        {% endif %}
+
+    {% elseif type == 'checkbox' %}
+
+        {% if 'common/form/checkbox.html'|is_template %}
+            {% include 'common/form/checkbox.html' with ['field': field] %}
+        {% else %}
+            <fieldset class="checkbox">
+                {% if field.instructions %}<div class="field-instructions">{{ field.instructions|e }}</div>{% endif %}
+                <label>
+                    <input type="hidden" name="{{ field.name }}" value="NO"/>
+                    <input class="checkbox{% if field.required %} required{% endif %}" type="checkbox" id="{{ field.name }}" name="{{ field.name }}" value="YES"{% if field.properties.checked %} checked="checked"{% endif %}/> {{ field.label|e }}{% if field.required %}<span class="req">*</span>{% endif %}
+                </label>
+            </fieldset>
+        {% endif %}
+
+    {% elseif type == 'header' %}
+        
+        {% if 'common/form/header.html'|is_template %}
+            {% include 'common/form/header.html' with ['field': field] %}
+        {% else %}
+            <h{{ field.properties.level }}>{{ field.label|e }}</h{{ field.properties.level }}>
+        {% endif %}
+
+    {% elseif type == 'hidden' %}
+
+        {% if 'common/form/hidden.html'|is_template %}
+            {% include 'common/form/hidden.html' with ['field': field] %}
+        {% else %}
+            <input type="hidden" name="{{ field.name }}" value="{{ field.default }}"/>
+        {% endif %}
+    
+    {% elseif type == 'richtext' %}
+
+        {% if 'common/form/richtext.html'|is_template %}
+            {% include 'common/form/richtext.html' with ['field': field] %}
+        {% else %}
+            {{ field.default }}
+        {% endif %}
+
+    {% else %}
+
+        {% if 'common/form/text.html'|is_template %}
+            {% include 'common/form/text.html' with ['field': field] %}
+        {% else %}
+            <fieldset class="text">
+                <label for="{{ field.name }}">{{ field.label|e }}{% if field.required %}<span class="req">*</span>{% endif %}</label>
+                {% if field.instructions %}<div class="field-instructions">{{ field.instructions|e }}</div>{% endif %}
+                <input type="text" class="text{% if field.required %} required{% endif %}{% if field.template == 'email' %} email{% endif %}" id="{{ field.name }}" name="{{ field.name }}" value="{{ field.default }}"{% if field.required %} required{% endif %}/>
+            </fieldset>
+        {% endif %}
+
+    {% endif %}
+{% endmacro %}
+
+{# Draw an entire form #}
+{% macro draw( form, fields, settings ) %}
+    {% import "common/form.html" as formHelper %}
+    {% set userSettings as settings|default('post') %}
+    {% if userSettings == "get" or userSettings == "post" %}
+        {% set userSettings as { "method": userSettings } %}
+    {% endif %}
+    {% set defaults as { "method": "post", "charset": "utf-8", "target": false, "validate": true, "autocomplete": false } %}
+    {% set settings as defaults|merge(userSettings) %}
+    <h2>Form Settings</h2>
+    <form action="{{ form.url }}" class="generated-form" method="{{ settings.method }}" accept-charset="{{ settings.charset }}"{% if settings.target %} target="{{ settings.target }}"{% endif %}{% if not settings.validate %} novalidate{% endif %}{% if settings.autocomplete %} autocomplete="on"{% endif %}>
+        {{ formHelper.drawFields(form.form) }}
+        <fieldset class="submit">
+            <input type="hidden" name="id" value="{{ form.id }}"/>
+            <input type="submit" value="Submit"/>
+        </fieldset>
+    </form>
+{% endmacro %}
+
+{% macro drawFields( fields ) %}
+    {% import "common/form.html" as formHelper %}
+    {% for field in fields %}{{ formHelper.field( field ) }}{% endfor %}
+{% endmacro %}

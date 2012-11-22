@@ -1,0 +1,6 @@
+<h4>Categories</h4>
+<ul>
+    {% for cat in hifi.get({'type':'category'}) %}
+    <li><a href="{{ cat.url }}">{{ cat.title }}</a></li>
+    {% endfor %}
+</ul>

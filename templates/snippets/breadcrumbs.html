@@ -1,0 +1,17 @@
+{% macro draw( thisPage ) %}
+    {% if not thisPage.type %}{% set thisPage as hifi.get({type: 'home'})[0] %}{% endif %}
+    {% import "snippets/breadcrumbs.html" as breadcrumbs %}
+    <a href="{{ hifi.url.base }}">Home</a>
+    {% if thisPage.url != '/' and thisPage.content|length > 0 %}
+        {{ breadcrumbs.drawItem( thisPage, thisPage ) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro drawItem( item, thisPage ) %}
+    {% import "snippets/breadcrumbs.html" as breadcrumbs %}
+    {% set parent as hifi.get({'id':item.parent})[0] %}
+    {% if parent.url != '/' %}
+        {{ breadcrumbs.drawItem( parent, thisPage ) }}
+    {% endif %}
+    &gt; <a{% if thisPage.url != item.url %} href="{{ item.url }}"{% endif %}>{{ item.title }}</a>
+{% endmacro %}

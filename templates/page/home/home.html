@@ -1,0 +1,190 @@
+{% extends "page/page.html" %}
+
+{% block title %}{{ hifi.settings.title }}{% endblock title %}
+
+{% block js %}
+{% parent %}
+    {% js "maps/vmap.js,maps/vmap.usa.js" %}
+    <script>
+        $('#vmap').vectorMap({ 
+            map: 'usa_en',
+            backgroundColor: null,
+            color: '#ffffff',
+            hoverColor: '#2577ca',
+            selectedColor: '#2577ca',
+            enableZoom: true,
+            showTooltip: true,
+            onRegionClick: function(element, code, region) {
+                var selectedState = region.toLowerCase().replace(" ", "-");
+                window.location.href = "/state/" + selectedState;
+            }
+        });
+    </script>
+    
+    
+{% endblock js %}
+
+{% block full %}
+<div id="main-content">
+<div class="home-main cf"> 
+
+    <div class="home-top home-bar cf flag">
+    
+        <div class="container">
+
+            <div class="content left-top">
+            
+                {{ this.content }}
+            
+            </div><!--- end .content -->
+            
+            <aside class="right-top side">
+        
+                <div class="current-count">
+                    
+                    {#
+                    <p>
+                        <span class="count loading-count">0</span><br>
+                        voters contacted
+                    </p>
+                    #}
+                
+                </div><!--end .current-count -->
+                
+                <div class="button-container">
+                    <a id="finish-button" href="#begin" class="button">Get Started</a>
+                </div><!--end .button-container -->
+    
+            </aside>
+        
+        </div><!--end .container -->
+    
+    </div><!--end .home-top -->
+    
+    <div id="demo" class="cf">
+    
+        <div class="container">
+        
+            <header class="main-title">
+                    <h2>Just two simple steps</h2>
+            </header><!-- end .main-title -->
+        
+            <ol>
+                <li class="first">
+                    <div class="number">
+                        1
+                    </div><!--end .number -->
+                    <div class="step-content">
+                        <p>Let your friends know you will be voting by sharing on Facebook.</p>
+                    </div><!--end .step-content -->
+                </li>
+                <li class="second">
+                    <div class="number">
+                        2
+                    </div><!--end .number -->
+                    <div class="step-content">
+                        <p>Select specific friends on Facebook and encourage them to make a difference this election by voting.</p>
+                    </div><!--end .step-content -->
+                </li>
+            </ol>
+        
+        </div><!--end .container -->
+    
+    </div><!--end #demo -->
+    
+    <div id="dec-bar" class="flag">
+    
+        <h2>Ready? Let's get started!</h2>
+    
+    </div>
+    
+    <div id="begin" class="home-bottom home-bar cf">
+
+        <div class="container">
+       
+            <div class="type-list">
+            
+                <header>
+            
+                    <h3>First choose a state where you want to encourage your friends</h3>
+                
+                </header>
+                
+                <div id="vmap" style="width: 100%; height: 500px;"></div>
+                
+                <ul class="state-list">
+                    {% for state in hifi.get({'type':'page','parent':{'type':'feed','url':'/state'},'orderBy':'title', 'inMenu':true, 'count': 100 }) %}
+                    <li><a href="{{ state.url }}">{{ state.title }}</a></li>
+                    {% endfor %}
+                </ul>
+
+            </div><!--end .type-list -->
+            
+            <div class="type-list">
+            
+                <header>
+            
+                    <h3>Or Choose a Specific Campaign</h3>
+                
+                </header>
+                
+                <ul>
+                    {% for section in hifi.get({'type':'folder','parent':{'type':'folder','url':'/campaign'},'orderBy':'ordinal', 'inMenu':true }) %}
+                    <li class="section-campaign">{{ section.title }}
+                        <ul>
+                            {% for page in hifi.get({'type':'content','parent':{'type':'folder','id':section.id},'orderBy':'title', 'inMenu':true }) %}
+                            <li><a {% if page.newWindow %} target="_blank"{% endif %} href="{{ page.url }}" href="{{ page.url }}">{{ page.title }}</a></li>    
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endfor %}
+                </ul>
+                
+                <div class="centered-link">
+                
+                    <a class="button smaller" href="/suggest">Add a campaign that isn't listed yet</a>
+                
+                </div><!--end .centered-link -->
+            
+            </div><!--end .type-list -->
+            
+        </div><!-- end .container -->
+        
+    </div><!-- end .home-button -->
+    
+    {#
+    <div id="states-info">
+    
+        <div class="container">
+        
+            <header>
+            
+                <h3>Number of voters contacted in each state</h3>
+                
+            </header>
+    
+            <ul id="states-list"></ul>
+            
+        </div><!--end .container -->
+        
+    </div><!--end #states-info -->
+    #}
+    
+    {#
+    <div class="home-extras cf home-bar">
+    
+        <div class="container">
+    
+            <p>For more about the influence Facebook can have on voting, check out this study published in the journal Nature.</p>
+
+            <p>If you are campaign interested in using FriendtheVote.com (it's free!), you can set up a page here.</p>
+        
+        </div><!--end .container -->
+    
+    </div><!--end .home-extras -->
+    #}
+
+</div><!-- .home-main -->
+</div><!--end #main-content -->
+
+{% endblock full %}

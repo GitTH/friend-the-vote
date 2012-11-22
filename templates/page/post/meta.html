@@ -1,0 +1,13 @@
+{% set comments as hifi.get({'type':'comment','isSpam':false,'isApproved':true,'parent':this.id,count:100}) %}
+<div class="meta">
+    <span class="comments"><a href="{{ this.url }}#comments">{{ comments|length }} Comment(s)</a></span> |  
+    <span class="timestamp">Posted <time datetime="{{ this.publishedAt|date("Y-m-d\\TH:i") }}">{{ this.publishedAt|date("F j, Y") }}</time></span> |
+    {% if this.relations.author[0].url != '' %}
+        by <span class="author"><a href="{{ this.relations.author[0].url }}">{{ this.relations.author[0].title }}</a></span> |  
+    {% endif %}
+    {% if this.relations.category %}
+        <nav class="categories">
+            {% for cat in this.relations.category %}{% if loop.index > 1 %}, {% endif %}<a href="{{ cat.url }}" rel="tag">{{ cat.title }}</a>{% endfor %}
+        </nav>
+    {% endif %}
+</div>

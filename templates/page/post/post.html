@@ -1,0 +1,21 @@
+{% extends "page/page.html" %}
+
+{% block rss %}
+    {% set feed as hifi.get({id:this.parent})[0] %}
+    <link rel="alternate" type="application/rss+xml" title="{{ feed.title }}" href="{{ feed.url }}.rss" />
+{% endblock rss %}
+
+{% block header %}
+    {% parent %}
+    {% include "page/post/meta.html" %}
+{% endblock header %}
+
+{% block content %}
+    {% parent %}
+    {% include 'common/comments/comments.html' %}
+{% endblock %}
+
+{% block sidebar %}
+    {% parent %}
+    {% include 'feed/sidebar.html' %}
+{% endblock sidebar %}

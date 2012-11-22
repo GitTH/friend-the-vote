@@ -1,0 +1,10 @@
+{% set class as '' %}
+{% if options.includeLevelClass %}{% set class as options.levelClassPrefix ~ currentDepth %}{% endif %}
+{% if item.url in hifi.url.path and item.type != 'home' %}{% set class as class ~ ' ' ~ options.ancestorActiveClass %}{% endif %}
+{% if hifi.url.path == item.url %}{% set class as class ~ ' ' ~ options.activeClass %}{% endif %}
+<li{% if class|length() > 0 %} class="{{ class }}"{% endif %}>
+    <a{% if item.newWindow %} {{ options.newWindowAttribute }}{% endif %}{% if item.type != 'folder' or options.linkFolders %} href="{{ item.url }}"{% endif %}>
+        {{ item.title }}
+    </a>
+    {% include options.wrapperTemplate with ['items':item.children.children,'options':options,'currentDepth':currentDepth + 1] %}
+</li>

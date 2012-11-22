@@ -1,0 +1,16 @@
+{% extends "page/page.html" %}
+
+{% block breadcrumbs %} {% endblock breadcrumbs %}
+
+{% block contenttitle %}Form Submission Error{% endblock %}
+
+{% block content %}
+    <p>Please <a href="javascript:history.back()">go back</a> and fix {% if errors|length == 1 %}this problem{% else %}these problems{% endif %}:</p>
+    <ul>
+        {% for error in errors %}
+        <li>
+            <strong>{{ error.label }}</strong> is {{ error.message }}.
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% extends "page/page.html" %}
+
+{% block breadcrumbs %} {% endblock breadcrumbs %}
+
+{% block contenttitle %}{{this.title}}{% endblock %}
+
+{% block content %}
+    {% block error %}{{error}}{% endblock %}
+    <form id="login" action="/hifi/login" method="post"> 
+        <fieldset> 
+            <label for="email">Email</label> 
+            <input type="text" class="text" id="email" name="email" value="{{email}}"/> 
+            <label for="password">Password</label> 
+            <input type="password" class="text" id="password" name="password" value=""/> 
+            <input type="hidden" name="redirect" value="{{redirect}}" />
+            <fieldset class="checkbox">
+            <label><input type="checkbox" name="staySignedIn" value="false"/> Remember me</label>
+            </fieldset>
+        </fieldset> 
+        <fieldset class="submit"> 
+            <input type="submit" value="Login"/> 
+        </fieldset> 
+    </form>
+{% endblock content %}

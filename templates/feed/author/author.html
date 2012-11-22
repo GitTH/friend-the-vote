@@ -1,0 +1,11 @@
+{% extends 'feed/feed.html' %}
+
+{% block breadcrumbs %} {% endblock %}
+
+{% block listing %}    
+    {% import 'snippets/pagination/paginator.html' as paginator %}
+    {{ paginator.paginate({
+        query: {type: 'post', related: {relation: 'author', to: this.id}, orderBy: '-publishedAt'},
+        template: 'page/post/post-partial.html'
+    }) }}
+{% endblock listing %}

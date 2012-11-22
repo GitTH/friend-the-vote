@@ -1,0 +1,6 @@
+{% if hasPrev or hasNext %}
+    <div class="pagination">
+        {% if hasPrev %}<a href="?{{ urlVar }}={{ prev }}" rel="prev">Previous</a>{% endif %}
+        {% if hasNext %}<a href="?{{ urlVar }}={{ next }}" rel="next">Next</a>{% endif %}
+    </div>
+{% endif %}

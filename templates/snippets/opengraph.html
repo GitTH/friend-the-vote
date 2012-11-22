@@ -1,0 +1,50 @@
+<!-- facebook & twitter og tags -->
+<meta name="twitter:card" content="summary">
+{% if this.type == "home" %}
+<meta property="og:title" content="{{ hifi.settings.title }}">
+<meta name="twitter:title" content="{{ hifi.settings.title }}">
+{% elseif this.meta.title %}
+<meta property="og:title" content="{{ this.meta.title }}">
+<meta name="twitter:title" content="{{ this.meta.title }}">
+{% else %}
+<meta property="og:title" content="{{ this.title }}">
+<meta name="twitter:title" content="{{ this.title }}">
+{% endif %}
+{% if this.type == "post" %}
+<meta property="og:type" content="article">
+{% else %}
+<meta property="og:type" content="website">
+{% endif %}
+<meta property="og:url" content="http://{{ hifi.url.host }}{{ hifi.url.path }}">
+<meta name="twitter:url" content="http://{{ hifi.url.host }}{{ hifi.url.path }}">
+{% if this.media %}
+{% set photo as this.media[0] %}
+<meta property="og:image" content="{{ photo.url|imagesize({ width:300, height:300, crop:true }) }}">
+<meta name="twitter:image" content="{{ photo.url|imagesize({ width:120, height:120, crop:true }) }}">
+{% endif %}
+<meta property="og:site_name" content="{{ hifi.settings.title }}">
+{% if this.meta.description %}
+<meta property="og:description" content="{{ this.meta.description }}">
+<meta name="twitter:description" content="{{ this.meta.description }}">
+{% elseif this.excerpt %}
+<meta property="og:description" content="{{ this.excerpt|striptags }}">
+<meta name="twitter:description" content="{{ this.excerpt|striptags }}">
+{% else %}
+<meta property="og:description" content="{{ this.content|striptags|truncate(160,'...') }}">
+<meta name="twitter:description" content="{{ this.content|striptags|truncate(160,'...') }}">
+{% endif %}
+{#
+
+<!-- More info
+https://dev.twitter.com/docs/cards
+https://developers.facebook.com/docs/opengraphprotocol/
+-->
+
+<!-- facebook page/user info -->
+<meta property="fb:admins" content="">
+<meta property="fb:app_id" content="">
+
+<!-- twitter usernames (include @) -->
+<meta name="twitter:site" content="">
+<meta name="twitter:creator" content="">
+#}

@@ -1,0 +1,38 @@
+{% macro paginate(options) %}
+
+    {% set defaults as {
+                    query: {type: 'content'},
+                    count: 10,
+                    urlVar: 'page',
+                    template: 'snippets/pagination/row.html',
+                    paginationTemplate: 'snippets/pagination/links.html'
+    } %}
+    
+    {% set options as defaults|merge(options) %}
+    
+    {% set pageNum as hifi.http.get[options.urlVar]|e %}
+
+    {% if not pageNum %}
+        {% set pageNum as 1 %}
+    {% endif %}
+    {% set count as options.query.count %}
+    {% if not count %}
+        {% set count as options.count %}
+    {% endif %}
+    {% set paginationDetails as {page: pageNum, count: count} %}
+    
+    {% set query as options.query|merge(paginationDetails) %}
+    
+    {% for item in hifi.get(query) %}
+        {% include options.template with ['item':item,'loop':loop] %}
+    {% endfor %}
+    
+    {% set hasPrev as pageNum > 1 %}
+    {% set prev as pageNum - 1 %}
+    {% set next as pageNum + 1 %}
+    {% set testquery as query|merge({page: next}) %}
+    {% set hasNext as hifi.get(testquery)|length > 0 %}
+    
+    {% include options.paginationTemplate with ['hasPrev':hasPrev,'hasNext':hasNext,'prev':prev,'next':next,'urlVar':options.urlVar] %}
+    
+{% endmacro %}

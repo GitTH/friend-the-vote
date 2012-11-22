@@ -1,0 +1,13 @@
+<li{% if this.author == parent.author %} class="author"{% endif %} id="comment-{{this.id}}">
+    <img width="50px" height="50px" class="gravatar" src="{{ this.email|gravatar(50) }}" alt="{{ this.author|e }}'s avatar"/>
+    <div class="comment">
+        <h5><cite>{% if this.url %}<a rel="nofollow" href="{{ this.url }}" title="Visit Commentor's Website">{{ this.author|e }}</a>{% else %}{{ this.author }}{% endif %}</cite></h5>
+        <div class="comment-meta">
+            <time datetime="{{ this.publishedAt|date("Y-m-d\\TH:i") }}">{{ this.publishedAt|date("F j, Y \\a\\t g:ia") }}</time>
+            | <a href="{{ parent.url }}#comment-{{ this.id }}" title="Permalink" rel="bookmark">Permalink</a>
+        </div>
+        <div class="comment-text">
+            {{ this.content }}
+        </div>
+    </div>
+</li>
