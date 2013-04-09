@@ -22,11 +22,15 @@ Similar tools were used during the 2012 Election by the [Obama](http://www.barac
 
 ## Installation
 
-The CMS uses [Hifi](http://gethifi.com) as a CMS. Additionally, fonts on the site use Typekit, so be sure to change the JavaScript in the `head` to your own to use the current fonts.
+Friend the Vote uses [Hifi](http://gethifi.com) as a CMS. Additionally, fonts on the site use Typekit, so be sure to change the JavaScript in the `head` to your own to use the current fonts.
 
 ## Improvements
 
 All of this code was written in the early morning hours in the days before Election Day, so there's a decent chunk that can be improved. If you have suggested changes, please feel free to let me know.
+
+The ideal next steps would be:
+1.   Clean up the JavaScript
+2.   Switch from Hifi to something that can be used independently, like [Jekyll](https://github.com/mojombo/jekyll) or Wordpress.
 
 ## Author
 
@@ -38,4 +42,4 @@ All of this code was written in the early morning hours in the days before Elect
 
 Friend the Vote is licensed under the MIT license. [(See License)](LICENSE.md).
 
-Anyone now is welcome to use it, regardless of political views or party.
+Anyone is welcome to use this, regardless of political views or party.
