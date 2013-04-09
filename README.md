@@ -24,6 +24,10 @@ Similar tools were used during the 2012 Election by the [Obama](http://www.barac
 
 The CMS uses [Hifi](http://gethifi.com) as a CMS. Additionally, fonts on the site use Typekit, so be sure to change the JavaScript in the `head` to your own to use the current fonts.
 
+## Improvements
+
+All of this code was written in the early morning hours in the days before Election Day, so there's a decent chunk that can be improved. If you have suggested changes, please feel free to let me know.
+
 ## Author
 
  * Created by [Tyler Pearson](http://typearson.com) with [New Media Campaigns](http://newmediacampaigns.com).
