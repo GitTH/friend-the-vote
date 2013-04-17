@@ -44,3 +44,7 @@ The ideal next steps would be:
 Friend the Vote is licensed under the MIT license. [(See License)](LICENSE.md).
 
 Anyone is welcome to use this, regardless of political views or party.
+
+## Credit
+
+Uses a checkmark icon [via Fontello](http://fontello.com) and the (amazing) StateFace state icon font from [ProPublica](http://propublica.github.io/stateface/).
